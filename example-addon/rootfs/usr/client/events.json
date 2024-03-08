@@ -1,0 +1,10 @@
+{
+    "CONNECT": "connect",
+    "DISCONNECT": "disconnect",
+    "HA_REPLY": "ha_reply",
+    "GET_REQUEST": "get_request",
+    "POST_REQUEST": "post_request",
+    "EXTERNAL_WS_CONNECTED": "external_ws_connected",
+    "EXTERNAL_WS_DISCONNECTED": "external_ws_disconnected",
+    "TO_WS_API": "to_ws_api"
+}

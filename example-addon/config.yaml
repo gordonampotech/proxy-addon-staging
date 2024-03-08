@@ -1,0 +1,22 @@
+# https://developers.home-assistant.io/docs/add-ons/configuration#add-on-config
+name: Proxy add-on
+version: "1.2.0"
+slug: example
+description: Proxy add-on
+arch:
+  - armhf
+  - armv7
+  - aarch64
+  - amd64
+  - i386
+init: false
+hassio_api: true
+hassio_role: homeassistant
+host_network: true
+map:
+  - addons
+# options:
+#   subdomain: ''
+# schema:
+#   subdomain: 'match(^[A-Za-z0-9]*$)'
+image: "elbert999/proxy-addon"

@@ -1,0 +1,29 @@
+#!/usr/bin/with-contenv bashio
+# ==============================================================================
+# Start the example service
+# s6-overlay docs: https://github.com/just-containers/s6-overlay
+# ==============================================================================
+
+# Declare variables
+declare subdomain
+
+# Get the 'subdomain' key from the user config options.
+#subdomain=$(bashio::config 'subdomain')
+
+# Check if 'subdomain' is empty
+echo "Subdomain is empty. Generating from MAC address."
+
+# Specify the network interface (adjust as necessary)
+INTERFACE="eth0"
+
+# Retrieve the MAC address for the interface
+MAC_ADDRESS=$(cat /sys/class/net/${INTERFACE}/address)
+
+# Extract the last 4 characters of the MAC address, in lowercase, and remove non-alphanumeric characters
+SUBDOMAIN_PREFIX=$(echo "${MAC_ADDRESS: -5}" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]//g')
+
+# Use the dynamically generated subdomain
+subdomain=$SUBDOMAIN_PREFIX
+echo "Using generated subdomain: $subdomain"
+
+python3 -u /usr/client/client.py "${subdomain}" token
