@@ -1,5 +1,8 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 1.3.0
+- Using binary script
+
 ## 1.2.0
 
 - Add an apparmor profile

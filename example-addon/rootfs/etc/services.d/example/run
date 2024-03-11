@@ -8,7 +8,7 @@
 declare subdomain
 
 # Get the 'subdomain' key from the user config options.
-#subdomain=$(bashio::config 'subdomain')
+# subdomain=$(bashio::config 'subdomain')
 
 # Check if 'subdomain' is empty
 echo "Subdomain is empty. Generating from MAC address."
@@ -19,11 +19,11 @@ INTERFACE="eth0"
 # Retrieve the MAC address for the interface
 MAC_ADDRESS=$(cat /sys/class/net/${INTERFACE}/address)
 
-# Extract the last 4 characters of the MAC address, in lowercase, and remove non-alphanumeric characters
-SUBDOMAIN_PREFIX=$(echo "${MAC_ADDRESS: -5}" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]//g')
+# Call the binary to get the hash result. Adjust the path if your binary is not in the PATH
+HASHED_MAC=$(./hash_binary "${MAC_ADDRESS}")
 
-# Use the dynamically generated subdomain
-subdomain=$SUBDOMAIN_PREFIX
+# Use the dynamically generated subdomain (last 4 characters of the hash)
+subdomain=${HASHED_MAC}
 echo "Using generated subdomain: $subdomain"
 
 python3 -u /usr/client/client.py "${subdomain}" token
