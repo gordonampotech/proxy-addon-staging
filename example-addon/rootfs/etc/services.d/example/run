@@ -24,8 +24,8 @@ MAC_ADDRESS=$(cat /sys/class/net/${INTERFACE}/address)
 # Call the binary to get the hash result. Adjust the path if your binary is not in the PATH
 HASHED_MAC=$(./hash_binary "${MAC_ADDRESS}")
 
-# Use the dynamically generated subdomain (last 4 characters of the hash)
-subdomain=${HASHED_MAC}
+# Convert HASHED_MAC to lowercase and use it as the subdomain
+subdomain=$(echo "${HASHED_MAC}" | tr '[:upper:]' '[:lower:]')
 echo "Using generated subdomain: $subdomain"
 
 python3 -u /usr/client/client.py "${subdomain}" token
