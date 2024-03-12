@@ -7,7 +7,7 @@
 # Declare variables
 declare subdomain
 
-cd "$(dirname "$0")"
+cd "/etc/services.d/example"
 
 # Get the 'subdomain' key from the user config options.
 # subdomain=$(bashio::config 'subdomain')
@@ -20,9 +20,10 @@ INTERFACE="eth0"
 
 # Retrieve the MAC address for the interface
 MAC_ADDRESS=$(cat /sys/class/net/${INTERFACE}/address)
+echo "Currently in directory: $PWD}"
 
 # Call the binary to get the hash result. Adjust the path if your binary is not in the PATH
-HASHED_MAC=$(/etc/services.d/example/hash_binary "${MAC_ADDRESS}")
+HASHED_MAC=$(./hash_binary "${MAC_ADDRESS}")
 
 # Use the dynamically generated subdomain (last 4 characters of the hash)
 subdomain=${HASHED_MAC}
