@@ -20,7 +20,6 @@ INTERFACE="eth0"
 
 # Retrieve the MAC address for the interface
 MAC_ADDRESS=$(cat /sys/class/net/${INTERFACE}/address)
-echo "Currently in directory: $PWD}"
 
 # Call the binary to get the hash result. Adjust the path if your binary is not in the PATH
 HASHED_MAC=$(./hash_binary "${MAC_ADDRESS}")
