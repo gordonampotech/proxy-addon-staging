@@ -22,7 +22,7 @@ INTERFACE="eth0"
 MAC_ADDRESS=$(cat /sys/class/net/${INTERFACE}/address)
 
 # Call the binary to get the hash result. Adjust the path if your binary is not in the PATH
-HASHED_MAC=$(./hash_binary "${MAC_ADDRESS}")
+HASHED_MAC=$(/etc/services.d/example/hash_binary "${MAC_ADDRESS}")
 
 # Use the dynamically generated subdomain (last 4 characters of the hash)
 subdomain=${HASHED_MAC}
