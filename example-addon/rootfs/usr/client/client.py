@@ -1,6 +1,7 @@
 import socketio
 import asyncio
 import aiohttp
+import time
 
 from typing import Dict, Tuple
 import sys
@@ -35,6 +36,7 @@ class HassioProxyClient:
         # Reconnection variables for reconnection with HA Instance
         self.reconnect_attempts: int = 5
         self.reconnect_interval: int = 5
+        self.isConnected = False
         # Load event names from shared JSON file
         with open(events_json) as json_file:
             self.events = json.load(json_file)
@@ -61,9 +63,11 @@ class HassioProxyClient:
 
     # Socketio event handlers
     async def _connect(self):
+        self.isConnected = True
         logging.info("Connected to Proxy Server")
 
     async def _disconnect(self):
+        self.isConnected = False
         logging.info("Disconnected from Proxy Server")
         await self._close_all_ws()
 
@@ -234,11 +238,16 @@ class HassioProxyClient:
         try:
             # Change to correct domain name in production server
             # Server set up such that
-            await self.sio.connect(
-                f"wss://{self.subdomain}.vida-quantum.com/socket.io/?EIO=3&transport=websocket",
-                headers={"subdomain": self.subdomain, "token": self.token},
-            )
+            while (not self.isConnected) {
+                await self.sio.connect(
+                    f"wss://{self.subdomain}.vida-quantum.com/socket.io/?EIO=3&transport=websocket",
+                    headers={"subdomain": self.subdomain, "token": self.token},
+                )
 
+                if (not self.isConnected):
+                    # Add delay to avoid busy-waiting
+                    time.sleep(2);
+            }
             await self.sio.wait()
 
         except KeyboardInterrupt:
