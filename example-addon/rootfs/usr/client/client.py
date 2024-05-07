@@ -238,7 +238,7 @@ class HassioProxyClient:
         try:
             # Change to correct domain name in production server
             # Server set up such that
-            while (not self.isConnected) {
+            while (not self.isConnected)
                 await self.sio.connect(
                     f"wss://{self.subdomain}.vida-quantum.com/socket.io/?EIO=3&transport=websocket",
                     headers={"subdomain": self.subdomain, "token": self.token},
@@ -246,8 +246,8 @@ class HassioProxyClient:
 
                 if (not self.isConnected):
                     # Add delay to avoid busy-waiting
-                    time.sleep(2);
-            }
+                    time.sleep(2)
+                    
             await self.sio.wait()
 
         except KeyboardInterrupt:
