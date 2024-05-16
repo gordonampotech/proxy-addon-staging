@@ -40,6 +40,18 @@ This addon enables your Home Assistant Hub to connect securely to an external pr
 - Once started, you can verify the connection status in the addon logs.
 - Look for messages indicating a successful connection to the proxy server.
 
+## For Developers
+
+To update the version of the addon
+
+Change the version in ./autobackup/config.yaml, e.g. version: "1.0.2" -> version: "1.2.0"
+
+After that, build the new docker image and push to the docker registry
+```
+docker build -t ghcr.io/gordonampotech/proxy-addon:<version_number> --platform linux/aarch64 .
+docker push ghcr.io/gordonampotech/proxy-addon:<version_number>
+```
+
 ## Troubleshooting
 
 If you encounter issues, please check the following:
