@@ -1,7 +1,6 @@
 import socketio
 import asyncio
 import aiohttp
-import time
 
 from typing import Dict, Tuple
 import sys
@@ -233,23 +232,21 @@ class HassioProxyClient:
                     "headers": headers,
                     "status": response.status,
                 }
+            
+    async def connect_to_server(self):
+        while (not self.isConnected):
+            await self.sio.connect(
+                f"wss://{self.subdomain}.vida-quantum.com/socket.io/?EIO=3&transport=websocket",
+                headers={"subdomain": self.subdomain, "token": self.token},
+            )
+            if (not self.isConnected):
+                # Add delay to avoid busy-waiting
+                await asyncio.sleep(self.reconnect_interval)
+        await self.sio.wait()
 
     async def start(self):
         try:
-            # Change to correct domain name in production server
-            # Server set up such that
-            while (not self.isConnected):
-                await self.sio.connect(
-                    f"wss://{self.subdomain}.vida-quantum.com/socket.io/?EIO=3&transport=websocket",
-                    headers={"subdomain": self.subdomain, "token": self.token},
-                )
-
-                if (not self.isConnected):
-                    # Add delay to avoid busy-waiting
-                    time.sleep(2)
-
-            await self.sio.wait()
-
+            await self.connect_to_server()
         except KeyboardInterrupt:
             logging.info("Shutting down gracefully...")
             await self.sio.disconnect()
@@ -259,6 +256,11 @@ class HassioProxyClient:
                 task.cancel()
 
             await self._close_all_ws()
+
+        except socketio.exceptions.ConnectionError as e:
+            print(f"Connection failed: {e}")
+            await asyncio.sleep(self.reconnect_interval)
+            await self.connect_to_server()
 
 
 def main():
