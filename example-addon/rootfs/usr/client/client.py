@@ -191,17 +191,16 @@ class HassioProxyClient:
             url = self.ha_url + data["path"]
             custom_headers = data["headers"]
             params = None
-            if "params" in data:
-                params = data["params"]
+            if "params" in data and data["params"]:
+                url += "?" + data["params"]
+            print(url, custom_headers, params)
             async with session.get(
                 url=url,
                 headers=custom_headers,
-                params=params,
                 allow_redirects=False,
             ) as response:
                 data = await response.read()
                 headers = dict(response.headers)
-
                 return {
                     "data": data,
                     "headers": headers,
