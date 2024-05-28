@@ -200,6 +200,7 @@ class HassioProxyClient:
                 allow_redirects=False,
             ) as response:
                 data = await response.read()
+                print(data)
                 headers = dict(response.headers)
                 return {
                     "data": data,
