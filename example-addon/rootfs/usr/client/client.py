@@ -216,7 +216,7 @@ class HassioProxyClient:
             params = None
             if "params" in data:
                 params = data["params"]
-
+            print(url, custom_headers, body, params)
             async with session.post(
                 url=url,
                 data=body,
